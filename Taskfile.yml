@@ -1,0 +1,37 @@
+version: "3"
+
+vars:
+  GOOS: "{{default OS .GOOS}}"
+  MVNW: '{{if eq .GOOS "windows"}}mvnw.cmd{{else}}./mvnw{{end}}'
+  DC_DIR: "deployment/docker-compose"
+  APPS_DC_FILE: "{{.DC_DIR}}/apps.yml"
+  INFRA_DC_FILE: "{{.DC_DIR}}/infra.yml"
+
+tasks:
+  build:
+    desc: Build all services
+    cmds:
+      - (cd ../mms-inventory-service && ./mvnw clean package)
+
+  build_image:
+    cmds:
+      - "(cd ../mms-inventory-service && {{.MVNW}} spring-boot:build-image -DskipTests)"
+
+  start:
+    desc: Start all services using Docker Compose
+    deps: [build]
+    cmds:
+      - "docker compose -f {{.APPS_DC_FILE}} -f {{.INFRA_DC_FILE}} up -d"
+
+  stop:
+    desc: Stop all services
+    cmds:
+      - "docker compose -f {{.APPS_DC_FILE}} -f {{.INFRA_DC_FILE}} down"
+
+  start_infra:
+    cmds:
+      - "docker compose -f {{.INFRA_DC_FILE}} up -d"
+
+  stop_infra:
+    cmds:
+      - "docker compose -f {{.INFRA_DC_FILE}} down"

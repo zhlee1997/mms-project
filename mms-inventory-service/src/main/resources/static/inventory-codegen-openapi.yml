@@ -1,0 +1,164 @@
+openapi: "3.0.2"
+info:
+  title: API Inventory Service - OpenAPI 3.0
+  description: Description of API Inventory Service
+  version: "1.0"
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://localhost:8080
+tags:
+  - name: Inventory
+    description: Manage inventory items in the hardware shop.
+paths:
+  /inventory:
+    get:
+      tags:
+        - Inventory
+      summary: List all inventory items
+      operationId: listInventoryItems
+      responses:
+        '200':
+          description: List of inventory items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryItem'
+    post:
+      tags:
+        - Inventory
+      summary: Create a new inventory item
+      operationId: createInventoryItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItemRequest'
+      responses:
+        '201':
+          description: Inventory item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+
+  /inventory/{itemId}:
+    get:
+      tags:
+        - Inventory
+      summary: Retrieve an inventory item by ID
+      operationId: getInventoryItem
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Inventory item found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+        '404':
+          description: Inventory item not found
+
+    put:
+      tags:
+        - Inventory
+      summary: Update an inventory item
+      operationId: updateInventoryItem
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItemRequest'
+      responses:
+        '200':
+          description: Inventory item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+        '404':
+          description: Inventory item not found
+
+    delete:
+      tags:
+        - Inventory
+      summary: Delete an inventory item
+      operationId: deleteInventoryItem
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Inventory item deleted successfully
+        '404':
+          description: Inventory item not found
+
+components:
+  schemas:
+    InventoryItem:
+      type: object
+      properties:
+        itemId:
+          type: integer
+          format: int64
+          description: Unique ID of the inventory item
+        name:
+          type: string
+          description: Name of the inventory item
+        description:
+          type: string
+          description: Detailed description of the item
+        quantity:
+          type: integer
+          description: Available stock quantity
+        price:
+          type: number
+          format: double
+          description: Price of the item
+      description: Details of an inventory item.
+
+    InventoryItemRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the inventory item
+        description:
+          type: string
+          description: Detailed description of the item
+        quantity:
+          type: integer
+          description: Available stock quantity
+        price:
+          type: number
+          format: double
+          description: Price of the item
+      description: Request payload for creating or updating an inventory item.

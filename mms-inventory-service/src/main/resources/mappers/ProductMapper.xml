@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jeremylee.mms_inventory_service.repository.InventoryRepository">
+
+    <!-- Select all products -->
+    <select id="getAllProducts" resultType="com.jeremylee.mms_inventory_service.model.Product">
+        SELECT id, code, name, description, category, brand, supplier_id, quantity_in_stock,
+        reorder_level, unit_price, cost_price, image_url, created_at, updated_at
+        FROM products;
+    </select>
+
+    <!-- Select product by ID -->
+    <select id="getProductById" parameterType="long" resultType="com.jeremylee.mms_inventory_service.model.Product">
+        SELECT id, code, name, description, category, brand, supplier_id, quantity_in_stock,
+        reorder_level, unit_price, cost_price, image_url, created_at, updated_at
+        FROM products
+        WHERE id = #{id};
+    </select>
+
+    <!-- Insert a new product -->
+    <insert id="createProduct" parameterType="com.jeremylee.mms_inventory_service.model.Product" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO products (code, name, description, category, brand, supplier_id, quantity_in_stock,
+        reorder_level, unit_price, cost_price, image_url, created_at)
+        VALUES (#{code}, #{name}, #{description}, #{category}, #{brand}, #{supplierId}, #{quantityInStock},
+        #{reorderLevel}, #{unitPrice}, #{costPrice}, #{imageUrl}, CURRENT_TIMESTAMP);
+    </insert>
+
+    <!-- Update a product -->
+    <update id="updateProduct" parameterType="map">
+        UPDATE products
+        SET code = #{product.code},
+            name = #{product.name},
+            description = #{product.description},
+            category = #{product.category},
+            brand = #{product.brand},
+            supplier_id = #{product.supplierId},
+            quantity_in_stock = #{product.quantityInStock},
+            reorder_level = #{product.reorderLevel},
+            unit_price = #{product.unitPrice},
+            cost_price = #{product.costPrice},
+            image_url = #{product.imageUrl},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id};
+    </update>
+
+    <!-- Delete a product -->
+    <delete id="deleteProduct" parameterType="long">
+        DELETE FROM products WHERE id = #{id};
+    </delete>
+
+</mapper>
