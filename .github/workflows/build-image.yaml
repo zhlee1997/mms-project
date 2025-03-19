@@ -48,9 +48,9 @@ jobs:
         run: |
           cd mms-inventory-service
           pack build leezonghan19/mms-inventory-service:latest \
-            --builder paketobuildpacks/builder:base \
+            --builder paketobuildpacks/builder-jammy-tiny \
+            --env BP_MAVEN_ACTIVE_PROFILES=native \
             --path target/*.jar \
-            --env BP_JVM_VERSION=21 \
             --publish
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
