@@ -50,8 +50,8 @@ jobs:
           pack build leezonghan19/mms-inventory-service:latest \
             --builder paketobuildpacks/builder:base \
             --path target/*.jar \
+            --env BP_JVM_VERSION=21 \
             --publish
-            --env BP_JVM_VERSION=21
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       # - name: Update dependency graph
