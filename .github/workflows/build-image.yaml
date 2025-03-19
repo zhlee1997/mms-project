@@ -51,6 +51,7 @@ jobs:
             --builder paketobuildpacks/builder:base \
             --path target/*.jar \
             --publish
+            --env BP_JVM_VERSION=21
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       # - name: Update dependency graph
