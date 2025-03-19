@@ -46,6 +46,7 @@ jobs:
 
       - name: Build and Publish Docker Image
         run: |
+          cd mms-inventory-service
           pack build leezonghan19/mms-inventory-service:latest \
             --builder paketobuildpacks/builder:base \
             --path target/*.jar \
