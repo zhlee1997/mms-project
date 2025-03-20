@@ -49,9 +49,20 @@ jobs:
           cd mms-inventory-service
           pack build leezonghan19/mms-inventory-service:latest \
             --builder paketobuildpacks/builder-jammy-tiny \
-            --env BP_MAVEN_ACTIVE_PROFILES=native \
             --path target/*.jar \
             --publish
+
+      # - name: Update Kubernetes manifests
+      #   run: |
+      #     sed -i "s|image: your-registry/spring-app:.*|image: your-registry/spring-app:${{ github.sha }}|g" k8s/deployment.yaml
+    
+      # - name: Commit and push updated K8s manifests
+      #   run: |
+      #     git config --global user.name 'GitHub Actions'
+      #     git config --global user.email 'actions@github.com'
+      #     git add k8s/deployment.yaml
+      #     git commit -m "Update image tag to ${{ github.sha }}"
+      #     git push
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       # - name: Update dependency graph
