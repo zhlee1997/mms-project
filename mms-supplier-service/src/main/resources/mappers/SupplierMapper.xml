@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jeremylee.mms_supplier_service.repository.SupplierRepository">
+
+    <!-- Select all suppliers -->
+    <select id="getAllSuppliers" resultType="com.jeremylee.mms_supplier_service.model.Supplier">
+        SELECT id, name, contact_name, phone, email, address, created_at
+        FROM suppliers;
+    </select>
+
+    <!-- Select supplier by ID -->
+    <select id="getSupplierById" parameterType="long" resultType="com.jeremylee.mms_supplier_service.model.Supplier">
+        SELECT id, name, contact_name, phone, email, address, created_at
+        FROM suppliers
+        WHERE id = #{supplierId};
+    </select>
+
+    <!-- Insert a new supplier -->
+    <insert id="createSupplier" parameterType="com.jeremylee.mms_supplier_service.model.Supplier" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO suppliers (name, contact_name, phone, email, address, created_at)
+        VALUES (#{name}, #{contactName}, #{phone}, #{email}, #{address}, CURRENT_TIMESTAMP);
+    </insert>
+
+    <!-- Update a supplier -->
+    <update id="updateSupplier" parameterType="map">
+        UPDATE suppliers
+        SET name = #{supplier.name},
+            contact_name = #{supplier.contactName},
+            phone = #{supplier.phone},
+            email = #{supplier.email},
+            address = #{supplier.address}
+        WHERE id = #{supplierId};
+    </update>
+
+    <!-- Delete a supplier -->
+    <delete id="deleteSupplier" parameterType="long">
+        DELETE FROM suppliers WHERE id = #{supplierId};
+    </delete>
+
+</mapper>

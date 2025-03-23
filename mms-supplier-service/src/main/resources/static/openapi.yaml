@@ -1,0 +1,210 @@
+openapi: 3.1.0
+info:
+  contact:
+    email: apiteam@swagger.io
+  description: API for managing suppliers in the inventory system
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: API Supplier Service - OpenAPI 3.0
+  version: "1.0"
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://localhost:8081
+paths:
+  /suppliers:
+    get:
+      operationId: listSuppliers
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Supplier'
+                type: array
+          description: List of suppliers
+      summary: List all suppliers
+      tags:
+      - Supplier
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Supplier
+    post:
+      operationId: createSupplier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: Supplier created successfully
+      summary: Create a new supplier
+      tags:
+      - Supplier
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Supplier
+  /suppliers/{supplierId}:
+    delete:
+      operationId: deleteSupplier
+      parameters:
+      - explode: false
+        in: path
+        name: supplierId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Supplier deleted successfully
+        "404":
+          description: Supplier not found
+      summary: Delete a supplier
+      tags:
+      - Supplier
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Supplier
+    get:
+      operationId: getSupplier
+      parameters:
+      - explode: false
+        in: path
+        name: supplierId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: Supplier found
+        "404":
+          description: Supplier not found
+      summary: Retrieve a supplier by ID
+      tags:
+      - Supplier
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Supplier
+    put:
+      operationId: updateSupplier
+      parameters:
+      - explode: false
+        in: path
+        name: supplierId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: Supplier updated successfully
+        "404":
+          description: Supplier not found
+      summary: Update a supplier
+      tags:
+      - Supplier
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Supplier
+components:
+  schemas:
+    Supplier:
+      description: Details of a supplier
+      example:
+        contact_name: contact_name
+        address: address
+        phone: phone
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 0
+        email: email
+      properties:
+        id:
+          description: Unique ID of the supplier
+          format: int64
+          type: integer
+        name:
+          description: Supplier name
+          type: string
+        contact_name:
+          description: Contact person
+          type: string
+        phone:
+          description: Contact number
+          type: string
+        email:
+          description: Supplier email (optional)
+          nullable: true
+          type: string
+        address:
+          description: Supplier address
+          nullable: true
+          type: string
+        created_at:
+          description: Timestamp when the supplier was created
+          format: date-time
+          type: string
+      type: object
+    SupplierRequest:
+      description: Request payload for creating or updating a supplier
+      example:
+        contact_name: contact_name
+        address: address
+        phone: phone
+        name: name
+        email: email
+      properties:
+        name:
+          description: Supplier name
+          type: string
+        contact_name:
+          description: Contact person
+          type: string
+        phone:
+          description: Contact number
+          type: string
+        email:
+          description: Supplier email (optional)
+          nullable: true
+          type: string
+        address:
+          description: Supplier address
+          nullable: true
+          type: string
+      type: object

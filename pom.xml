@@ -16,6 +16,7 @@
 
   <modules>
         <module>mms-inventory-service</module>
+        <module>mms-supplier-service</module>
         <module>mms-kafka-consumer</module>
         <module>mms-kafka-producer</module>
     </modules>
