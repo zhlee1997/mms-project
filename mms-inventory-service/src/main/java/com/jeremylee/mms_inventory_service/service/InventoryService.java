@@ -2,11 +2,16 @@ package com.jeremylee.mms_inventory_service.service;
 
 import com.jeremylee.mms_inventory_service.exception.ProductNotFoundException;
 import com.jeremylee.mms_inventory_service.model.Product;
+import com.jeremylee.mms_inventory_service.model.supplier.CreateSupplierRequest;
+import com.jeremylee.mms_inventory_service.model.supplier.Supplier;
 import com.jeremylee.mms_inventory_service.repository.InventoryRepository;
 import com.jeremylee.mms_inventory_service.request.CreateProductRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +41,16 @@ public class InventoryService implements IInventoryService {
     public Product createProduct(CreateProductRequest product) {
         // TODO: Validate if product already exists by code, name
         Product productModel = new Product();
+        CreateSupplierRequest createSupplierRequest = new CreateSupplierRequest();
+        createSupplierRequest.setName("Supplier");
+        createSupplierRequest.setContactName("Contact");
+        createSupplierRequest.setPhone("1234567890");
+        createSupplierRequest.setEmail("asd");
+        createSupplierRequest.setAddress("Address");
+
+        // TODO: Create supplier if not exists
+        Supplier createdSupplier = createSupplierViaRestClient(createSupplierRequest);
+
         productModel.setCode(product.getCode());
         productModel.setName(product.getName());
         productModel.setDescription(product.getDescription());
@@ -90,6 +105,23 @@ public class InventoryService implements IInventoryService {
         int rowsDeleted = inventoryRepository.deleteProduct(productId);
         if (rowsDeleted == 0) {
             throw new ProductNotFoundException("Product not found: " + id);
+        }
+    }
+
+    private Supplier createSupplierViaRestClient(CreateSupplierRequest supplierRequest) {
+        RestClient restClient = RestClient.create();
+
+        try {
+            return restClient.post()
+                    // .uri("http://localhost:8081/api/v1/suppliers") // Adjust the URI to your
+                    // supplier service
+                    .uri("http://localhost:8091/suppliers") // Adjust the URI to your supplier service
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(supplierRequest)
+                    .retrieve()
+                    .body(Supplier.class);
+        } catch (RestClientException e) {
+            throw new RuntimeException("Failed to create supplier via supplier service: " + e.getMessage(), e);
         }
     }
 
