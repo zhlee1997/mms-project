@@ -6,20 +6,29 @@ vars:
   DC_DIR: "deployment/docker-compose"
   APPS_DC_FILE: "{{.DC_DIR}}/apps.yml"
   INFRA_DC_FILE: "{{.DC_DIR}}/infra.yml"
+  MONITORING_DC_FILE: "{{.DC_DIR}}/monitoring.yml"
 
 tasks:
   build:
     desc: Build all services
     cmds:
-      - (cd ../mms-inventory-service && ./mvnw clean package)
+      - "{{.MVNW}} -pl mms-service-registry clean package"
+      - "{{.MVNW}} -pl mms-config-service clean package"
+      - "{{.MVNW}} -pl mms-api-gateway clean package"
+      - "{{.MVNW}} -pl mms-inventory-service clean package"
+      - "{{.MVNW}} -pl mms-supplier-service clean package"
 
   build_image:
     cmds:
-      - "(cd ../mms-inventory-service && {{.MVNW}} spring-boot:build-image -DskipTests)"
+      - "{{.MVNW}} -pl mms-service-registry spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl mms-config-service spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl mms-api-gateway spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl mms-inventory-service spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl mms-supplier-service spring-boot:build-image -DskipTests"
 
   start:
     desc: Start all services using Docker Compose
-    deps: [build]
+    # deps: [build]
     cmds:
       - "docker compose -f {{.APPS_DC_FILE}} -f {{.INFRA_DC_FILE}} up -d"
 
@@ -35,3 +44,11 @@ tasks:
   stop_infra:
     cmds:
       - "docker compose -f {{.INFRA_DC_FILE}} down"
+
+  start_monitoring:
+    cmds:
+      - "docker compose -f {{.MONITORING_DC_FILE}} up -d"
+
+  stop_monitoring:
+    cmds:
+      - "docker compose -f {{.MONITORING_DC_FILE}} down"

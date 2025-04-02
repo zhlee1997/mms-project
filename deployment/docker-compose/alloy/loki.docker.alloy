@@ -1,0 +1,16 @@
+loki.source.docker "docker_logs" {
+  host = "unix:///var/run/docker.sock"
+  targets = discovery.docker.docker_host_logs.targets
+  labels = { job = "docker-logs" }
+  forward_to = [loki.process.process.receiver]
+}
+
+loki.process "process" {
+  forward_to = [loki.write.write.receiver]
+}
+
+loki.write "write" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

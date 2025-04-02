@@ -22,17 +22,19 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: "21"
           distribution: "temurin"
           cache: maven
-      
+
       - name: Build service with Maven
         run: |
           cd mms-inventory-service
+          mvn clean package -DskipTests
+          cd ../mms-supplier-service
           mvn clean package -DskipTests
 
       - name: Install Pack CLI
@@ -51,11 +53,16 @@ jobs:
             --builder paketobuildpacks/builder-jammy-tiny \
             --path target/*.jar \
             --publish
+          cd ../mms-supplier-service
+          pack build leezonghan19/mms-supplier-service:latest \
+            --builder paketobuildpacks/builder-jammy-tiny \
+            --path target/*.jar \
+            --publish
 
       # - name: Update Kubernetes manifests
       #   run: |
       #     sed -i "s|image: your-registry/spring-app:.*|image: your-registry/spring-app:${{ github.sha }}|g" k8s/deployment.yaml
-    
+
       # - name: Commit and push updated K8s manifests
       #   run: |
       #     git config --global user.name 'GitHub Actions'

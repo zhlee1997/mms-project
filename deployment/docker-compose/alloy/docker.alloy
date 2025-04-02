@@ -1,0 +1,20 @@
+// --------------------------------------------   Receivers/Discovery
+discovery.docker "docker_host_metrics" {
+  host = "unix:///var/run/docker.sock"
+
+  filter{
+    name = "label"
+    values = ["alloy.metrics.enable=true"]
+  }
+
+}
+
+discovery.docker "docker_host_logs" {
+  host = "unix:///var/run/docker.sock"
+
+  filter{
+    name = "label"
+    values = ["alloy.logs.enable=true"]
+  }
+
+}

@@ -19,6 +19,9 @@
         <module>mms-supplier-service</module>
         <module>mms-kafka-consumer</module>
         <module>mms-kafka-producer</module>
+        <module>mms-service-registry</module>
+        <module>mms-config-service</module>
+        <module>mms-api-gateway</module>
     </modules>
 
   <build>

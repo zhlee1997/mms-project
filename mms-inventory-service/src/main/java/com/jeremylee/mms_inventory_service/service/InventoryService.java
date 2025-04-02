@@ -22,6 +22,9 @@ public class InventoryService implements IInventoryService {
     @Autowired
     private InventoryRepository inventoryRepository;
 
+    @Autowired
+    private RestClient restClient;
+
     @Override
     public List<Product> getAllProducts() {
         return inventoryRepository.getAllProducts();
@@ -42,11 +45,11 @@ public class InventoryService implements IInventoryService {
         // TODO: Validate if product already exists by code, name
         Product productModel = new Product();
         CreateSupplierRequest createSupplierRequest = new CreateSupplierRequest();
-        createSupplierRequest.setName("Supplier");
-        createSupplierRequest.setContactName("Contact");
-        createSupplierRequest.setPhone("1234567890");
-        createSupplierRequest.setEmail("asd");
-        createSupplierRequest.setAddress("Address");
+        createSupplierRequest.setName("Supplier 13456");
+        createSupplierRequest.setContactName("Contact 13456");
+        createSupplierRequest.setPhone("1234567890123456");
+        createSupplierRequest.setEmail("asd123456");
+        createSupplierRequest.setAddress("Address123465");
 
         // TODO: Create supplier if not exists
         Supplier createdSupplier = createSupplierViaRestClient(createSupplierRequest);
@@ -109,13 +112,13 @@ public class InventoryService implements IInventoryService {
     }
 
     private Supplier createSupplierViaRestClient(CreateSupplierRequest supplierRequest) {
-        RestClient restClient = RestClient.create();
 
         try {
             return restClient.post()
                     // .uri("http://localhost:8081/api/v1/suppliers") // Adjust the URI to your
                     // supplier service
-                    .uri("http://localhost:8091/suppliers") // Adjust the URI to your supplier service
+                    // .uri("http://localhost:8091/suppliers") // Adjust the URI to your supplier
+                    .uri("http://mms-supplier-service/suppliers") // Adjust the URI to your supplier service
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(supplierRequest)
                     .retrieve()
