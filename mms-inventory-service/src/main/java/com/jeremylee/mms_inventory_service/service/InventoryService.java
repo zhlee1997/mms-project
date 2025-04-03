@@ -118,7 +118,7 @@ public class InventoryService implements IInventoryService {
                     // .uri("http://localhost:8081/api/v1/suppliers") // Adjust the URI to your
                     // supplier service
                     // .uri("http://localhost:8091/suppliers") // Adjust the URI to your supplier
-                    .uri("http://mms-supplier-service/suppliers") // Adjust the URI to your supplier service
+                    .uri("http://mms-supplier-service:8091/suppliers") // Adjust the URI to your supplier service
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(supplierRequest)
                     .retrieve()
