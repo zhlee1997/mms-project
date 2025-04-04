@@ -40,6 +40,8 @@ jobs:
           mvn clean package -DskipTests
           cd ../mms-service-registry
           mvn clean package -DskipTests
+          cd ../mms-api-gateway
+          mvn clean package -DskipTests
 
       - name: Install Pack CLI
         uses: buildpacks/github-actions/setup-pack@v5.0.0
@@ -69,6 +71,11 @@ jobs:
             --publish
           cd ../mms-service-registry
           pack build leezonghan19/mms-service-registry:latest \
+            --builder paketobuildpacks/builder-jammy-tiny \
+            --path target/*.jar \
+            --publish
+          cd ../mms-api-gateway
+          pack build leezonghan19/mms-api-gateway:latest \
             --builder paketobuildpacks/builder-jammy-tiny \
             --path target/*.jar \
             --publish
