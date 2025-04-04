@@ -68,7 +68,7 @@ jobs:
             --path target/*.jar \
             --publish
           cd ../mms-service-registry
-          pack build leezonghan19/mms-service-../mms-service-registry:latest \
+          pack build leezonghan19/mms-service-registry:latest \
             --builder paketobuildpacks/builder-jammy-tiny \
             --path target/*.jar \
             --publish
