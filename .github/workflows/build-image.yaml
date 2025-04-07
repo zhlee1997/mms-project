@@ -54,8 +54,10 @@ jobs:
 
       - name: Build and Publish Docker Image
         run: |
+          VERSION=${{ github.run_number }}
+
           cd mms-inventory-service
-          pack build leezonghan19/mms-inventory-service:latest \
+          pack build leezonghan19/mms-inventory-service:${VERSION} \
             --builder paketobuildpacks/builder-jammy-tiny \
             --path target/*.jar \
             --publish
